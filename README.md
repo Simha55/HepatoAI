@@ -34,7 +34,7 @@ This project focuses not just on model accuracy, but also on **scalable inferenc
 ```markdown
 ## 🎬 Demo Video
 
-[![Watch the Demo]](assets/demo_hepato.mp4)
+[Watch the 30-Second Demo](assets/demo_hepato.mp4)
 ```
 
 ---
@@ -46,15 +46,9 @@ Add your images like this:
 ```markdown
 ## 🖼 Sample Predictions
 
-(assets/val_batch0_pred.png)
-(assets/val_batch1_pred.png)
-(assets/val_batch2_pred.png)
-```
-
-Place your images inside:
-
-```
-/assets/
+![Prediction 1](assets/val_batch0_pred.png)
+![Prediction 2](assets/val_batch1_pred.png)
+![Prediction 3](assets/val_batch2_pred.png)
 ```
 
 ---
