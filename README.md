@@ -25,31 +25,22 @@ This project focuses not just on model accuracy, but also on **scalable inferenc
 
 ---
 
-# 🎥 Demo
-
-## 🔹 30-Second Demo Video
-
-👉 Insert your video like this:
-
-```markdown
 ## 🎬 Demo Video
 
-[Watch the 30-Second Demo](assets/demo_hepato.mp4)
-```
+▶️ [Watch the 30-Second Demo](./assets/demo_hepato.mp4)
 
 ---
 
-# 🖼 Sample Results
-
-Add your images like this:
-
-```markdown
 ## 🖼 Sample Predictions
 
-![Prediction 1](assets/val_batch0_pred.jpg)
-![Prediction 2](assets/val_batch1_pred.jpg)
-![Prediction 3](assets/val_batch2_pred.jpg)
-```
+### Example 1
+![Prediction 1](./assets/val_batch0_pred.png)
+
+### Example 2
+![Prediction 2](./assets/val_batch1_pred.png)
+
+### Example 3
+![Prediction 3](./assets/val_batch2_pred.png)
 
 ---
 
