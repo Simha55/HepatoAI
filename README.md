@@ -46,9 +46,9 @@ Add your images like this:
 ```markdown
 ## 🖼 Sample Predictions
 
-![Prediction 1](assets/val_batch0_pred.png)
-![Prediction 2](assets/val_batch1_pred.png)
-![Prediction 3](assets/val_batch2_pred.png)
+![Prediction 1](assets/val_batch0_pred.jpg)
+![Prediction 2](assets/val_batch1_pred.jpg)
+![Prediction 3](assets/val_batch2_pred.jpg)
 ```
 
 ---
@@ -270,29 +270,6 @@ MIT License
 # 👤 Author
 
 Manisimha Varma
-M.S. Computer Science (AI) – USC
-Backend Systems + ML Infrastructure
-
 ---
 
----
 
-# 🔥 If You Want To Make It Even More Impressive
-
-I can also:
-
-* Add a clean architecture diagram block
-* Add a shields.io badge section
-* Make it look like a startup-ready repo
-* Add system design section for recruiters
-* Add performance graphs markdown
-* Add “Why this is production-ready” section
-
-Just tell me the vibe:
-
-* 🔬 Research-focused
-* 🏗 Systems engineering-focused
-* 🚀 Startup product-ready
-* 💼 Recruiter-optimized
-
-And I’ll tailor it perfectly.
