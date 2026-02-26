@@ -34,21 +34,7 @@ This project focuses not just on model accuracy, but also on **scalable inferenc
 ```markdown
 ## 🎬 Demo Video
 
-[![Watch the Demo](assets/demo_thumbnail.png)](assets/demo_video.mp4)
-```
-
-Or if hosting externally (recommended for GitHub):
-
-```markdown
-## 🎬 Demo Video
-
-▶️ Watch here: https://your-video-link.com
-```
-
-Place your video inside:
-
-```
-/assets/demo_video.mp4
+[![Watch the Demo]](assets/demo_hepato.mp4)
 ```
 
 ---
@@ -60,14 +46,9 @@ Add your images like this:
 ```markdown
 ## 🖼 Sample Predictions
 
-### Steatosis Detection
-![Steatosis](assets/steatosis_example.png)
-
-### Inflammation Detection
-![Inflammation](assets/inflammation_example.png)
-
-### Fibrosis Detection
-![Fibrosis](assets/fibrosis_example.png)
+(assets/val_batch0_pred.png)
+(assets/val_batch1_pred.png)
+(assets/val_batch2_pred.png)
 ```
 
 Place your images inside:
