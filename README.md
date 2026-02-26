@@ -34,13 +34,13 @@ This project focuses not just on model accuracy, but also on **scalable inferenc
 ## 🖼 Sample Predictions
 
 ### Example 1
-![Prediction 1](./assets/val_batch0_pred.png)
+![Prediction 1](./assets/val_batch0_pred.jpg)
 
 ### Example 2
-![Prediction 2](./assets/val_batch1_pred.png)
+![Prediction 2](./assets/val_batch1_pred.jpg)
 
 ### Example 3
-![Prediction 3](./assets/val_batch2_pred.png)
+![Prediction 3](./assets/val_batch2_pred.jpg)
 
 ---
 
