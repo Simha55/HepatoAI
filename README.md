@@ -1,67 +1,323 @@
-# AssetLens (DETR on VOC) — 4-day interview project
+# 🧠 HepatoAI – Scalable Microbatched Liver Histopathology Detection System
 
-## What you get
-- Fine-tune DETR on VOC2007 (transfer learning) + baseline evaluation + curves
-- FastAPI backend with:
-  - `/detect` (sync) used by a simple upload UI at `/`
-  - `/v1/assets` workflow (upload many photos → stored detections → report/export)
-  - micro-batching, backpressure, timeouts, metrics, GPU health breaker, CPU fallback
-- ONNX export + ONNX Runtime toggle for latency comparisons
-- HTTP benchmark script to print p50/p95/RPS
+> Real-time & batch object detection for liver biopsy histopathology images using DETR & YOLOv8, built with a production-grade FastAPI backend and microbatched GPU inference.
 
-## Setup
+---
+
+## 🚀 Overview
+
+HepatoAI is an end-to-end AI-powered detection system designed to identify key histopathological features in liver biopsy images:
+
+* **Fibrosis**
+* **Inflammation**
+* **Steatosis**
+* **Ballooning**
+
+The system supports:
+
+* ⚡ Real-time single-image detection
+* 📦 High-throughput batch processing
+* 🔄 Microbatched GPU inference
+* 📊 Latency benchmarking & metrics tracking
+* 🧩 Modular model backend (DETR / YOLOv8 / ONNX / Torch)
+
+This project focuses not just on model accuracy, but also on **scalable inference architecture, latency optimization, and production-readiness**.
+
+---
+
+# 🎥 Demo
+
+## 🔹 30-Second Demo Video
+
+👉 Insert your video like this:
+
+```markdown
+## 🎬 Demo Video
+
+[![Watch the Demo](assets/demo_thumbnail.png)](assets/demo_video.mp4)
+```
+
+Or if hosting externally (recommended for GitHub):
+
+```markdown
+## 🎬 Demo Video
+
+▶️ Watch here: https://your-video-link.com
+```
+
+Place your video inside:
+
+```
+/assets/demo_video.mp4
+```
+
+---
+
+# 🖼 Sample Results
+
+Add your images like this:
+
+```markdown
+## 🖼 Sample Predictions
+
+### Steatosis Detection
+![Steatosis](assets/steatosis_example.png)
+
+### Inflammation Detection
+![Inflammation](assets/inflammation_example.png)
+
+### Fibrosis Detection
+![Fibrosis](assets/fibrosis_example.png)
+```
+
+Place your images inside:
+
+```
+/assets/
+```
+
+---
+
+# 🏗 System Architecture
+
+```text
+Client
+   ↓
+FastAPI Server
+   ↓
+MicroBatcher
+   ↓
+InferenceEngine (DETR / YOLOv8)
+   ↓
+ONNX Runtime / Torch
+   ↓
+SQLite (metadata + detections)
+```
+
+### Key Design Decisions
+
+* Modular inference engine abstraction
+* Microbatching to improve GPU utilization
+* Asynchronous background processing for batch uploads
+* Latency percentile tracking (p50, p95)
+* Model-agnostic backend switching
+
+---
+
+# ⚙️ Tech Stack
+
+### Backend
+
+* FastAPI
+* Asyncio
+* SQLite (WAL mode)
+* Pydantic
+
+### ML / Inference
+
+* DETR (Transformer-based detection)
+* YOLOv8 (Anchor-free CNN detection)
+* ONNX Runtime
+* PyTorch
+
+### Performance Optimization
+
+* Microbatching
+* GPU concurrency tuning
+* Latency percentile monitoring
+
+---
+
+# 📊 Performance Benchmarks
+
+### Single Detection API (1200 Requests)
+
+| Concurrency | p50 Latency | p95 Latency | Throughput |
+| ----------- | ----------- | ----------- | ---------- |
+| 1           | 17 ms       | 19 ms       | 57 RPS     |
+| 4           | 78 ms       | 85 ms       | 180 RPS    |
+
+### Multi-Detection API
+
+| Metric | Value   |
+| ------ | ------- |
+| p50    | ~597 ms |
+| p95    | ~656 ms |
+
+> Insight: End-to-end latency is dominated by queueing + I/O under high concurrency, not just GPU compute.
+
+---
+
+# 🧠 Model Performance (mAP@0.5)
+
+| Model  | Validation mAP | Test mAP |
+| ------ | -------------- | -------- |
+| DETR   | 0.56           | 0.57     |
+| YOLOv8 | 0.50           | 0.52     |
+
+DETR provides stronger global reasoning, while YOLOv8 offers faster inference under certain configurations.
+
+---
+
+# 🔁 Microbatching Explained
+
+Instead of running inference per request:
+
+```text
+Request 1 → GPU
+Request 2 → GPU
+Request 3 → GPU
+```
+
+HepatoAI batches requests:
+
+```text
+[Req1, Req2, Req3, Req4] → Single GPU Call
+```
+
+Benefits:
+
+* Better GPU utilization
+* Higher throughput
+* Reduced per-request overhead
+
+Tradeoff:
+
+* Slight batching delay
+
+---
+
+# 📦 Batch Processing Pipeline
+
+1. Upload multiple images (`/v1/assets`)
+2. Persist images to storage
+3. Submit images to microbatcher
+4. Run inference
+5. Store detections + latency
+6. Track progress & asset state
+
+Status transitions:
+
+```
+pending → processing → done / done_with_failures
+```
+
+---
+
+# 🛠 Installation
+
 ```bash
+git clone https://github.com/your-username/hepatoai.git
+cd hepatoai
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## VOC2007
-Place dataset like:
-```
-data/VOCdevkit/VOC2007/JPEGImages
-data/VOCdevkit/VOC2007/Annotations
-data/VOCdevkit/VOC2007/ImageSets/Main
-```
+---
 
-Set:
-```bash
-export VOC_ROOT=./data/VOCdevkit/VOC2007
-```
+# ▶️ Running the Service
 
-## Day 1 baseline
 ```bash
-python train/eval_voc.py --model facebook/detr-resnet-50 --split test
-```
-
-## Day 1–2 fine-tune
-```bash
-python train/finetune_voc.py --outdir weights/detr_voc_ft --epochs 30 --batch 2 --img 640 --freeze_backbone_epochs 10
-```
-
-Evaluate best checkpoint on test:
-```bash
-python train/eval_voc.py --model weights/detr_voc_ft --split test
-```
-
-## Export ONNX
-```bash
-python scripts/export_onnx.py --model-dir weights/detr_voc_ft --onnx-out weights/detr_voc_ft/model.onnx --img 640
-```
-
-## Run backend + UI
-```bash
-export MODEL_DIR=weights/detr_voc_ft
-export ONNX_PATH=weights/detr_voc_ft/model.onnx
-export USE_ONNX=0  # set 1 to use ONNX Runtime
-uvicorn app.main:app --host 127.0.0.1 --port 8000
+uvicorn app.main:app --reload
 ```
 
 Open:
-- http://127.0.0.1:8000
-- http://127.0.0.1:8000/docs
 
-## Benchmark
-```bash
-python scripts/bench_http.py --url http://127.0.0.1:8000/detect --image path/to/sample.jpg --concurrency 20 --requests 200
 ```
+http://localhost:8000/docs
+```
+
+---
+
+# 🧪 Example API Usage
+
+### Single Detection
+
+```bash
+curl -X POST "http://localhost:8000/v1/detect" \
+  -F "file=@sample.jpg"
+```
+
+### Batch Upload
+
+```bash
+curl -X POST "http://localhost:8000/v1/assets" \
+  -F "files=@img1.jpg" \
+  -F "files=@img2.jpg"
+```
+
+---
+
+# 🔮 Future Improvements
+
+* TensorRT optimization
+* INT8 quantization
+* Object storage integration (S3)
+* Redis-based distributed microbatching
+* Kubernetes autoscaling
+* Postgres for higher concurrency
+
+---
+
+# 🎯 Why This Project Matters
+
+Manual histopathology review:
+
+* 5–30 minutes per case
+* 1–7 day turnaround
+* Inter-observer variability
+
+HepatoAI demonstrates how AI + scalable backend systems can:
+
+* Reduce detection latency to milliseconds
+* Support high-throughput labs
+* Provide structured, reproducible outputs
+* Integrate into modern ML-driven workflows
+
+---
+
+# 📌 Key Engineering Learnings
+
+* GPU throughput ≠ API latency
+* Tail latency (p95) dominated by queueing under load
+* Microbatching improves utilization but must be tuned
+* Inference optimization requires both model + systems thinking
+
+---
+
+# 📜 License
+
+MIT License
+
+---
+
+# 👤 Author
+
+Manisimha Varma
+M.S. Computer Science (AI) – USC
+Backend Systems + ML Infrastructure
+
+---
+
+---
+
+# 🔥 If You Want To Make It Even More Impressive
+
+I can also:
+
+* Add a clean architecture diagram block
+* Add a shields.io badge section
+* Make it look like a startup-ready repo
+* Add system design section for recruiters
+* Add performance graphs markdown
+* Add “Why this is production-ready” section
+
+Just tell me the vibe:
+
+* 🔬 Research-focused
+* 🏗 Systems engineering-focused
+* 🚀 Startup product-ready
+* 💼 Recruiter-optimized
+
+And I’ll tailor it perfectly.
