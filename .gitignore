@@ -1,0 +1,47 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+.env.*
+
+# ---- OS / IDE ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ---- Local DB + stored images (your app defaults here) ----
+data_db/
+*.db
+*.sqlite
+*.sqlite3
+
+# ---- Datasets / exports ----
+data/
+yolo_ds/
+visualize_data/
+viz_gt/
+
+# ---- Training runs / results ----
+runs/
+runs_yolo26/
+results/
+
+# ---- Model weights / large artifacts ----
+weights/
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# ---- Logs / caches ----
+*.log
+.cache/
+.ipynb_checkpoints/
